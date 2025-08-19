@@ -30,9 +30,10 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, var(--cream) 0%, var(--warm-gray) 100%);
+            background: #ffffff;
             color: var(--text-dark);
-            line-height: 1.6;
+            line-height: 1.5;
+            font-size: 14px;
         }
 
         .container {
@@ -383,8 +384,31 @@
         /* Responsive */
         @media (max-width: 768px) {
             .container {
-                padding: 20px;
+                padding: 15px;
                 margin: 10px;
+            }
+            
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                padding: 15px;
+            }
+            
+            .summary-item {
+                padding: 8px;
+                min-height: 60px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            .summary-item h3 {
+                font-size: 0.75rem;
+                margin: 0 0 4px 0;
+            }
+            
+            .summary-item:nth-child(5) {
+                grid-column: 1 / -1;
             }
             
             .tabs-nav {
@@ -392,8 +416,47 @@
                 justify-content: flex-start;
             }
             
+            .tab-button {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+                min-width: 80px;
+            }
+            
             .sections-container {
                 grid-template-columns: 1fr;
+            }
+            
+            .day-card {
+                padding: 15px;
+            }
+            
+            .day-info h3 {
+                font-size: 1rem;
+            }
+            
+            .day-info p {
+                font-size: 0.8rem;
+            }
+            
+            .status-badge {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+            
+            .section-item {
+                padding: 10px;
+            }
+            
+            .section-number {
+                font-size: 0.85rem;
+            }
+            
+            .section-duration {
+                font-size: 0.75rem;
+            }
+            
+            .day-progress-text {
+                font-size: 0.75rem;
             }
         }
     </style>
