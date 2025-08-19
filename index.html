@@ -71,7 +71,7 @@
         }
         table {
             width: 100%;
-            min-width: 800px;
+            min-width: 900px;
             border-collapse: collapse;
         }
         th, td {
@@ -98,9 +98,16 @@
         .completed {
             background-color: #d4edda;
         }
+        .partial {
+            background-color: #fff3cd;
+        }
         .checkbox {
             transform: scale(1.2);
             margin-right: 5px;
+        }
+        .section-checkbox {
+            transform: scale(1.1);
+            margin: 2px;
         }
         .progress-bar {
             width: 100%;
@@ -130,6 +137,27 @@
             background-color: #ff5252;
         }
         .section-number {
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+        .section-item {
+            display: block;
+            margin: 3px 0;
+            padding: 4px 6px;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            line-height: 1.3;
+        }
+        .section-item.completed {
+            background-color: #d4edda;
+            border-color: #28a745;
+        }
+        .sections-list {
+            max-width: 250px;
+            line-height: 1.3;
+        }
+        .day-percentage {
             font-weight: bold;
             color: #2c5aa0;
         }
@@ -170,9 +198,6 @@
             <div class="chart-box">
                 <canvas id="progressChart"></canvas>
             </div>
-            <div class="chart-box">
-                <canvas id="dailyChart"></canvas>
-            </div>
         </div>
 
         <button class="reset-btn" onclick="resetProgress()">🔄 Reiniciar Progreso</button>
@@ -185,8 +210,8 @@
                         <th>Día</th>
                         <th>Fecha</th>
                         <th>Secciones</th>
-                        <th>Duración</th>
                         <th>Total Día</th>
+                        <th>Porcentaje</th>
                         <th>Estado</th>
                     </tr>
                 </thead>
@@ -230,15 +255,15 @@
         ];
 
         let completedSections = new Set();
-        let progressChart, dailyChart;
+        let progressChart;
 
         function initializeApp() {
             generateDates();
-            loadProgress(); // Cargamos antes de renderizar
+            loadProgress();
             renderTable();
             updateSummary();
             createCharts();
-            updateCharts(); // Actualizamos las gráficas con datos guardados
+            updateCharts();
         }
 
         function generateDates() {
@@ -279,25 +304,69 @@
                 const hours = Math.floor(totalMinutes / 60);
                 const minutes = totalMinutes % 60;
 
-                const sectionsText = dayData.sections.map(s => 
-                    `<span class="section-number">${s.num}</span> (${Math.floor(s.duration/60)}h ${s.duration%60}min)`
-                ).join(', ');
+                // Crear HTML para las secciones con checkboxes individuales
+                const sectionsHtml = dayData.sections.map(s => {
+                    const isCompleted = completedSections.has(s.num);
+                    return `<div class="section-item ${isCompleted ? 'completed' : ''}">
+                        <input type="checkbox" class="section-checkbox" ${isCompleted ? 'checked' : ''} 
+                               onchange="toggleSection(${s.num})" id="section${s.num}">
+                        <label for="section${s.num}" class="section-number">${s.num}</label>
+                        <small>(${Math.floor(s.duration/60)}h ${s.duration%60}min)</small>
+                    </div>`;
+                }).join('');
 
-                const allCompleted = dayData.sections.every(s => completedSections.has(s.num));
+                // Calcular progreso del día
+                const completedSectionsInDay = dayData.sections.filter(s => completedSections.has(s.num)).length;
+                const totalSectionsInDay = dayData.sections.length;
+                const dayPercentage = Math.round((completedSectionsInDay / totalSectionsInDay) * 100);
+                
+                const allCompleted = dayPercentage === 100;
+                const hasProgress = dayPercentage > 0;
 
-                row.className = allCompleted ? 'completed' : '';
+                // Determinar clase CSS del row
+                let rowClass = '';
+                if (allCompleted) rowClass = 'completed';
+                else if (hasProgress) rowClass = 'partial';
+
+                // Estado del día
+                let dayStatus = '';
+                if (allCompleted) dayStatus = '✅ Completado';
+                else if (hasProgress) dayStatus = `🔄 En progreso (${completedSectionsInDay}/${totalSectionsInDay})`;
+                else dayStatus = '⏳ Pendiente';
+
+                row.className = rowClass;
                 row.innerHTML = `
-                    <td><input type="checkbox" class="checkbox" ${allCompleted ? 'checked' : ''} onchange="toggleDay(${index})"></td>
+                    <td><input type="checkbox" class="checkbox" ${allCompleted ? 'checked' : ''} 
+                             onchange="toggleDay(${index})" ${hasProgress && !allCompleted ? 'indeterminate' : ''}></td>
                     <td><strong>Día ${dayData.day}</strong></td>
                     <td>${dayData.date}</td>
-                    <td>${sectionsText}</td>
-                    <td>${dayData.sections.length} secciones</td>
+                    <td><div class="sections-list">${sectionsHtml}</div></td>
                     <td><strong>${hours}h ${minutes}min</strong></td>
-                    <td>${allCompleted ? '✅ Completado' : '⏳ Pendiente'}</td>
+                    <td><span class="day-percentage">${dayPercentage}%</span></td>
+                    <td>${dayStatus}</td>
                 `;
+
+                // Establecer indeterminado si es necesario
+                const dayCheckbox = row.querySelector('.checkbox');
+                if (hasProgress && !allCompleted) {
+                    dayCheckbox.indeterminate = true;
+                }
 
                 dayCounter++;
             });
+        }
+
+        function toggleSection(sectionNum) {
+            if (completedSections.has(sectionNum)) {
+                completedSections.delete(sectionNum);
+            } else {
+                completedSections.add(sectionNum);
+            }
+
+            renderTable();
+            updateSummary();
+            updateCharts();
+            saveProgress();
         }
 
         function toggleDay(dayIndex) {
@@ -305,8 +374,10 @@
             const allCompleted = dayData.sections.every(s => completedSections.has(s.num));
 
             if (allCompleted) {
+                // Si está completo, desmarcar todas las secciones del día
                 dayData.sections.forEach(section => completedSections.delete(section.num));
             } else {
+                // Si no está completo, marcar todas las secciones del día
                 dayData.sections.forEach(section => completedSections.add(section.num));
             }
 
@@ -354,21 +425,14 @@
                         borderWidth: 0
                     }]
                 },
-                options: { responsive: true }
-            });
-
-            const ctx2 = document.getElementById('dailyChart').getContext('2d');
-            dailyChart = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6'],
-                    datasets: [{
-                        label: 'Secciones Completadas',
-                        data: [0, 0, 0, 0, 0, 0],
-                        backgroundColor: '#2196F3'
-                    }]
-                },
-                options: { responsive: true }
+                options: { 
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
             });
         }
 
@@ -377,22 +441,6 @@
             const remaining = 67 - completed;
             progressChart.data.datasets[0].data = [completed, remaining];
             progressChart.update();
-
-            const weeklyProgress = [0, 0, 0, 0, 0, 0];
-            let currentWeek = 0;
-            let dayCount = 0;
-
-            courseData.forEach(dayData => {
-                if (dayData.sections.length === 0) return;
-                if (dayCount > 0 && dayCount % 5 === 0) currentWeek++;
-                dayData.sections.forEach(section => {
-                    if (completedSections.has(section.num)) weeklyProgress[currentWeek]++;
-                });
-                dayCount++;
-            });
-
-            dailyChart.data.datasets[0].data = weeklyProgress;
-            dailyChart.update();
         }
 
         function resetProgress() {
@@ -405,17 +453,14 @@
             }
         }
 
-        // 🔹 PERSISTENCIA DE DATOS
         function saveProgress() {
             localStorage.setItem('completedSections', JSON.stringify(Array.from(completedSections)));
-            console.log('Progreso guardado:', Array.from(completedSections));
         }
 
         function loadProgress() {
             const saved = localStorage.getItem('completedSections');
             if (saved) {
                 completedSections = new Set(JSON.parse(saved));
-                console.log('Progreso cargado:', Array.from(completedSections));
             }
         }
 
