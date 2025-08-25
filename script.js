@@ -1,34 +1,51 @@
-const courseData = [
-    {day: 1, sections: [{num: 1, duration: 63}, {num: 2, duration: 16}, {num: 3, duration: 31}], date: ''},
-    {day: 2, sections: [{num: 4, duration: 26}, {num: 5, duration: 11}, {num: 6, duration: 7}, {num: 7, duration: 39}, {num: 8, duration: 49}], date: ''},
-    {day: 3, sections: [{num: 9, duration: 55}, {num: 10, duration: 43}], date: ''},
-    {day: 4, sections: [{num: 11, duration: 40}, {num: 12, duration: 37}, {num: 14, duration: 39}], date: ''},
-    {day: 5, sections: [{num: 13, duration: 97}], date: ''},
-    {day: 6, sections: [{num: 15, duration: 54}, {num: 17, duration: 47}], date: ''},
-    {day: 7, sections: [{num: 16, duration: 83}, {num: 18, duration: 13}, {num: 19, duration: 31}], date: ''},
-    {day: 8, sections: [{num: 20, duration: 6}, {num: 21, duration: 11}, {num: 22, duration: 26}, {num: 23, duration: 49}, {num: 24, duration: 21}], date: ''},
-    {day: 9, sections: [{num: 25, duration: 76}, {num: 28, duration: 22}], date: ''},
-    {day: 10, sections: [{num: 26, duration: 100}], date: ''},
-    {day: 11, sections: [{num: 27, duration: 54}, {num: 29, duration: 22}, {num: 30, duration: 20}], date: ''},
-    {day: 12, sections: [{num: 31, duration: 27}, {num: 33, duration: 23}, {num: 34, duration: 33}, {num: 35, duration: 27}], date: ''},
-    {day: 13, sections: [{num: 32, duration: 69}, {num: 36, duration: 38}], date: ''},
-    {day: 14, sections: [{num: 38, duration: 51}, {num: 39, duration: 39}], date: ''},
-    {day: 15, sections: [{num: 37, duration: 99}], date: ''},
-    {day: 16, sections: [{num: 41, duration: 25}, {num: 42, duration: 2}, {num: 43, duration: 4}, {num: 44, duration: 55}, {num: 49, duration: 16}], date: ''},
-    {day: 17, sections: [{num: 40, duration: 136}], date: ''},
-    {day: 18, sections: [{num: 45, duration: 43}, {num: 46, duration: 33}, {num: 50, duration: 16}], date: ''},
-    {day: 19, sections: [{num: 47, duration: 43}, {num: 48, duration: 40}, {num: 51, duration: 45}], date: ''},
-    {day: 20, sections: [{num: 52, duration: 54}, {num: 56, duration: 11}, {num: 57, duration: 23}], date: ''},
-    {day: 21, sections: [{num: 54, duration: 87}, {num: 60, duration: 25}], date: ''},
-    {day: 22, sections: [{num: 55, duration: 104}], date: ''},
-    {day: 23, sections: [{num: 53, duration: 191}], date: ''},
-    {day: 24, sections: [{num: 59, duration: 36}, {num: 63, duration: 59}], date: ''},
-    {day: 25, sections: [{num: 58, duration: 132}], date: ''},
-    {day: 26, sections: [{num: 62, duration: 108}], date: ''},
-    {day: 27, sections: [{num: 61, duration: 164}], date: ''},
-    {day: 28, sections: [{num: 65, duration: 65}, {num: 66, duration: 35}], date: ''},
-    {day: 29, sections: [{num: 64, duration: 16}, {num: 67, duration: 1}], date: ''}
+// Primero extraemos todas las secciones en orden numérico
+const allSections = [
+  { num: 1, duration: 63 }, { num: 2, duration: 16 }, { num: 3, duration: 31 }, { num: 4, duration: 26 },
+  { num: 5, duration: 11 }, { num: 6, duration: 7 }, { num: 7, duration: 39 }, { num: 8, duration: 49 },
+  { num: 9, duration: 55 }, { num: 10, duration: 43 }, { num: 11, duration: 40 },
+  { num: 12, duration: 37 }, { num: 13, duration: 97 },
+  { num: 14, duration: 39 }, { num: 15, duration: 54 },
+  { num: 16, duration: 83 }, { num: 17, duration: 47 },
+  { num: 18, duration: 13 }, { num: 19, duration: 31 }, { num: 20, duration: 6 }, { num: 21, duration: 11 }, { num: 22, duration: 26 }, { num: 23, duration: 49 },
+  { num: 24, duration: 21 }, { num: 25, duration: 76 },
+  { num: 26, duration: 100 }, { num: 27, duration: 54 },
+  { num: 28, duration: 22 }, { num: 29, duration: 22 }, { num: 30, duration: 20 }, { num: 31, duration: 27 },
+  { num: 32, duration: 69 }, { num: 33, duration: 23 }, { num: 34, duration: 33 },
+  { num: 35, duration: 27 }, { num: 36, duration: 38 }, { num: 37, duration: 99 },
+  { num: 38, duration: 51 }, { num: 39, duration: 39 },
+  { num: 40, duration: 136 },
+  { num: 41, duration: 25 }, { num: 42, duration: 2 }, { num: 43, duration: 4 }, { num: 44, duration: 55 }, { num: 45, duration: 43 }, { num: 46, duration: 33 },
+  { num: 47, duration: 17 }, { num: 48, duration: 40 }, { num: 49, duration: 16 }, { num: 50, duration: 16 }, { num: 51, duration: 45 }, { num: 52, duration: 32 },
+  { num: 53.1, duration: 95, name: "Sección 53 - (1-17)" },
+  { num: 53.2, duration: 96, name: "Sección 53 - (18-35)" },
+  { num: 54, duration: 87 }, { num: 55, duration: 62 },
+  { num: 56, duration: 11 }, { num: 57, duration: 23 }, { num: 58, duration: 110 },
+  { num: 59, duration: 36 }, { num: 60, duration: 25 }, { num: 61, duration: 82 },
+  { num: 62, duration: 108 }, { num: 63, duration: 37 },
+  { num: 64, duration: 16 }, { num: 65, duration: 65 }, { num: 66, duration: 35 }, { num: 67, duration: 1 }
 ];
+
+// Ahora agrupamos manualmente en días, respetando el límite de 140 min
+function agrupar(sections, max = 140) {
+  const dias = [];
+  let actual = [];
+  let suma = 0;
+
+  for (const sec of sections) {
+    if (suma + sec.duration <= max) {
+      actual.push(sec);
+      suma += sec.duration;
+    } else {
+      dias.push(actual);
+      actual = [sec];
+      suma = sec.duration;
+    }
+  }
+  if (actual.length) dias.push(actual);
+  return dias.map((secs, i) => ({ day: i + 1, sections: secs, date: '' }));
+}
+
+const courseData = agrupar(allSections, 140);
 
 let completedSections = new Set();
 let progressChart;
@@ -63,6 +80,78 @@ function generateDates() {
     }
 }
 
+function calculateWeekProgress(week) {
+    let totalMinutes = 0;
+    let completedMinutes = 0;
+    let totalSections = 0;
+    let completedSectionsCount = 0;
+
+    week.forEach(dayData => {
+        dayData.sections.forEach(section => {
+            totalMinutes += section.duration;
+            totalSections++;
+            if (completedSections.has(section.num)) {
+                completedMinutes += section.duration;
+                completedSectionsCount++;
+            }
+        });
+    });
+
+    const percentage = totalMinutes > 0 ? Math.round((completedMinutes / totalMinutes) * 100) : 0;
+    const remainingMinutes = totalMinutes - completedMinutes;
+
+    return {
+        totalMinutes,
+        completedMinutes,
+        remainingMinutes,
+        totalSections,
+        completedSectionsCount,
+        percentage
+    };
+}
+
+function createWeekProgressCard(weekStats, weekNumber) {
+    const card = document.createElement('div');
+    card.className = 'week-progress-card';
+
+    const completedHours = Math.floor(weekStats.completedMinutes / 60);
+    const completedMins = weekStats.completedMinutes % 60;
+    const totalHours = Math.floor(weekStats.totalMinutes / 60);
+    const totalMins = weekStats.totalMinutes % 60;
+    const remainingHours = Math.floor(weekStats.remainingMinutes / 60);
+    const remainingMins = weekStats.remainingMinutes % 60;
+
+    card.innerHTML = `
+        <div class="week-progress-header">
+            <h3 class="week-progress-title">Progreso de la Semana ${weekNumber}</h3>
+            <div class="week-percentage">${weekStats.percentage}%</div>
+        </div>
+        <div class="week-progress-bar">
+            <div class="week-progress-fill" style="width: ${weekStats.percentage}%"></div>
+        </div>
+        <div class="week-stats">
+            <div class="week-stat">
+                <div class="week-stat-label">Completado</div>
+                <div class="week-stat-value">${completedHours}h ${completedMins}m</div>
+            </div>
+            <div class="week-stat">
+                <div class="week-stat-label">Restante</div>
+                <div class="week-stat-value">${remainingHours}h ${remainingMins}m</div>
+            </div>
+            <div class="week-stat">
+                <div class="week-stat-label">Total</div>
+                <div class="week-stat-value">${totalHours}h ${totalMins}m</div>
+            </div>
+            <div class="week-stat">
+                <div class="week-stat-label">Secciones</div>
+                <div class="week-stat-value">${weekStats.completedSectionsCount}/${weekStats.totalSections}</div>
+            </div>
+        </div>
+    `;
+
+    return card;
+}
+
 function createTabs() {
     const tabsNav = document.getElementById('tabsNav');
     const tabsContent = document.getElementById('tabsContent');
@@ -70,7 +159,7 @@ function createTabs() {
     tabsNav.innerHTML = '';
     tabsContent.innerHTML = '';
 
-    // Crear 6 semanas (5 días laborales cada una)
+    // Crear 5 semanas (5 días laborales cada una, menos la última con 2 días)
     const weeks = [];
     let currentWeekDays = [];
     let dayCounter = 0;
@@ -105,6 +194,11 @@ function createTabs() {
         weekTitle.className = 'week-title';
         weekTitle.textContent = `Semana ${weekIndex + 1}`;
         tabContent.appendChild(weekTitle);
+
+        // Agregar tarjeta de progreso de la semana
+        const weekStats = calculateWeekProgress(week);
+        const weekProgressCard = createWeekProgressCard(weekStats, weekIndex + 1);
+        tabContent.appendChild(weekProgressCard);
 
         const daysGrid = document.createElement('div');
         daysGrid.className = 'days-grid';

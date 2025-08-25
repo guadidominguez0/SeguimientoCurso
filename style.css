@@ -205,6 +205,85 @@ h1 {
   letter-spacing: -0.3px;
 }
 
+/* Weekly Progress Card */
+.week-progress-card {
+  background: linear-gradient(135deg, var(--warm-gray), #f9f8f5);
+  border: 2px solid var(--secondary-green);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 6px 20px rgba(62, 109, 82, 0.1);
+}
+
+.week-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.week-progress-title {
+  color: var(--primary-green);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.week-percentage {
+  background: var(--primary-green);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.week-progress-bar {
+  width: 100%;
+  height: 12px;
+  background-color: var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.week-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-green), var(--secondary-green));
+  border-radius: 6px;
+  transition: width 0.8s ease;
+}
+
+.week-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.week-stat {
+  text-align: center;
+  padding: 12px;
+  background: var(--off-white);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.week-stat-label {
+  color: var(--text-light);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.week-stat-value {
+  color: var(--primary-green);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
 .days-grid {
   display: grid;
   gap: 20px;
@@ -449,5 +528,24 @@ h1 {
   
   .day-progress-text {
     font-size: 0.75rem;
+  }
+  
+  .week-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .week-stat {
+    padding: 8px;
+  }
+  
+  .week-stat-value {
+    font-size: 1rem;
+  }
+  
+  .week-progress-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
   }
 }
