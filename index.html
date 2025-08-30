@@ -12,38 +12,39 @@
         <h1>Seguimiento del Curso</h1>
         <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;">52.5 horas en 30 días</p>
         
-        <div class="summary">
-            <div class="summary-item">
-                <h3>Total Secciones</h3>
-                <p id="totalSections">67</p>
+        <div class="summary-chart-container">
+            <div class="summary">
+                <div class="summary-item">
+                    <h3>Total Secciones</h3>
+                    <p id="totalSections">67</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Completadas</h3>
+                    <p id="completedSections">0</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Progreso</h3>
+                    <p id="progressPercentage">0%</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Horas Completadas</h3>
+                    <p id="hoursCompleted">0h 0min</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Horas Restantes</h3>
+                    <p id="hoursRemaining">52h 30min</p>
+                </div>
             </div>
-            <div class="summary-item">
-                <h3>Completadas</h3>
-                <p id="completedSections">0</p>
-            </div>
-            <div class="summary-item">
-                <h3>Progreso</h3>
-                <p id="progressPercentage">0%</p>
-            </div>
-            <div class="summary-item">
-                <h3>Horas Completadas</h3>
-                <p id="hoursCompleted">0h 0min</p>
-            </div>
-            <div class="summary-item">
-                <h3>Horas Restantes</h3>
-                <p id="hoursRemaining">52h 30min</p>
+            
+            <!-- Contenedor del gráfico más pequeño -->
+            <div class="chart-container">
+                <canvas id="progressChart"></canvas>
             </div>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar">
                 <div class="progress-fill" id="progressBar"></div>
-            </div>
-        </div>
-
-        <div class="charts-container">
-            <div class="chart-box">
-                <canvas id="progressChart"></canvas>
             </div>
         </div>
 
