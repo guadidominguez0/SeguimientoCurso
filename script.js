@@ -371,6 +371,7 @@ function updateSummary() {
     const totalSections = 67;
     const completed = completedSections.size;
     const percentage = Math.round((completed / totalSections) * 100);
+    const remaining = totalSections - completed;
 
     let totalCompletedMinutes = 0;
     completedSections.forEach(sectionNum => {
@@ -391,6 +392,7 @@ function updateSummary() {
     document.getElementById('hoursCompleted').textContent = `${completedHours}h ${completedMins}min`;
     document.getElementById('hoursRemaining').textContent = `${remainingHours}h ${remainingMins}min`;
     document.getElementById('progressBar').style.width = `${percentage}%`;
+    document.getElementById('remainingSections').textContent = remaining;
 }
 
 function createCharts() {
