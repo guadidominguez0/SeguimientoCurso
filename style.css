@@ -58,7 +58,7 @@ h1 {
 
 .summary {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   background: var(--warm-gray);
   padding: 25px;
@@ -508,7 +508,8 @@ h1 {
     margin: 0 0 4px 0;
   }
   
-  .summary-item:nth-child(5) {
+  .summary-item:nth-child(5), 
+  .summary-item:nth-child(6) {
     grid-column: 1 / -1;
   }
   
